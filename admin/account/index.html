@@ -1,1 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account - Mercy Flight EMS</title>
+  <link rel="stylesheet" href="/admin/assets/admin.css" />
+</head>
+<body>
+  <div class="app-shell">
+    
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-mark">MF</div>
+    <div>
+      <h1 class="brand-title">Mercy Flight EMS</h1>
+      <p class="brand-subtitle">Batavia Operations Portal</p>
+    </div>
+  </div>
 
+  <nav class="nav" aria-label="Administration navigation">
+    <div class="nav-label">Operations</div>
+    <a class="nav-link" href="/admin/"><span class="nav-icon">D</span><span>Dashboard</span></a><a class="nav-link" href="/admin/board/"><span class="nav-icon">V</span><span>Vehicle Board</span></a>
+    <div class="nav-label">Administration</div>
+    <a class="nav-link" href="/admin/users/"><span class="nav-icon">U</span><span>User Management</span></a><a class="nav-link" href="/admin/audit/"><span class="nav-icon">A</span><span>Audit Log</span></a><a class="nav-link active" href="/admin/account/"><span class="nav-icon">P</span><span>My Account</span></a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <strong data-user-name>Loading user...</strong>
+      <span data-user-role>Authenticated user</span>
+    </div>
+    <button class="logout-button" type="button" data-logout>Log Out</button>
+  </div>
+</aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <button class="mobile-menu-button" type="button" data-menu-toggle aria-label="Open menu">☰</button>
+          <div>
+            <h1 class="page-title">My Account</h1>
+            <p class="page-subtitle">Manage your authenticated portal account.</p>
+          </div>
+        </div>
+        <div class="session-badge">
+          <span class="status-dot"></span>
+          <span>Secure session active</span>
+        </div>
+      </div>
+
+      <div id="errorBanner" class="error-banner" role="alert"></div>
+      
+<section class="content-panel">
+  <h2>My Account</h2>
+  <p>Password change and account information will be added here.</p>
+  <div class="placeholder-box">
+    This page is connected to the portal navigation and ready for the next development phase.
+  </div>
+</section>
+
+    </main>
+  </div>
+  <script src="/admin/assets/portal.js"></script>
+</body>
+</html>
