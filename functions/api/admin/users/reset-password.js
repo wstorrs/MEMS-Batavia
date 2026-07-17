@@ -97,13 +97,3 @@ export async function onRequestPost(context) {
         : "Password reset successfully. The user must sign in again."
   });
 }
-
-export function onRequest() {
-  return jsonResponse(
-    {
-      ok: false,
-      error: "Method not allowed."
-    },
-    405
-  );
-}
