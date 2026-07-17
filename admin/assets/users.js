@@ -23,6 +23,21 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function formatDate(value) {
+  if (!value) return "Never";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "-";
+  }
+
+  return date.toLocaleString([], {
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+}
+
 function formatRole(role) {
   const normalized = String(role || "").toLowerCase();
   if (normalized === "admin") return "Administrator";
