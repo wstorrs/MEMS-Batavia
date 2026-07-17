@@ -5,34 +5,158 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>User Management - Mercy Flight EMS</title>
   <link rel="stylesheet" href="/admin/assets/admin.css" />
+  <style>
+    .users-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .users-toolbar p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .secondary-button {
+      min-height: 40px;
+      padding: 0 15px;
+      border: 1px solid rgba(255, 103, 31, 0.55);
+      border-radius: 9px;
+      background: transparent;
+      color: var(--white);
+      cursor: pointer;
+    }
+
+    .secondary-button:hover {
+      background: rgba(255, 103, 31, 0.17);
+    }
+
+    .secondary-button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .users-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .users-table {
+      width: 100%;
+      min-width: 680px;
+      border-collapse: collapse;
+      background: rgba(6, 16, 35, 0.35);
+    }
+
+    .users-table th,
+    .users-table td {
+      padding: 15px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .users-table th {
+      color: var(--muted);
+      font-size: 0.76rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .users-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .users-table tbody tr:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .user-status {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .user-status-active {
+      color: #dcfce7;
+      background: rgba(34, 197, 94, 0.14);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .user-status-disabled {
+      color: #fee2e2;
+      background: rgba(239, 68, 68, 0.13);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .table-state {
+      margin-top: 16px;
+      padding: 15px;
+      border-radius: 10px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .table-state.error {
+      color: #fee2e2;
+      background: rgba(127, 29, 29, 0.32);
+      border: 1px solid rgba(239, 68, 68, 0.42);
+    }
+
+    @media (max-width: 680px) {
+      .users-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="app-shell">
-    
-<aside class="sidebar">
-  <div class="brand">
-    <div class="brand-mark">MF</div>
-    <div>
-      <h1 class="brand-title">Mercy Flight EMS</h1>
-      <p class="brand-subtitle">Batavia Operations Portal</p>
-    </div>
-  </div>
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">MF</div>
+        <div>
+          <h1 class="brand-title">Mercy Flight EMS</h1>
+          <p class="brand-subtitle">Batavia Operations Portal</p>
+        </div>
+      </div>
 
-  <nav class="nav" aria-label="Administration navigation">
-    <div class="nav-label">Operations</div>
-    <a class="nav-link" href="/admin/"><span class="nav-icon">D</span><span>Dashboard</span></a><a class="nav-link" href="/admin/board/"><span class="nav-icon">V</span><span>Vehicle Board</span></a>
-    <div class="nav-label">Administration</div>
-    <a class="nav-link active" href="/admin/users/"><span class="nav-icon">U</span><span>User Management</span></a><a class="nav-link" href="/admin/audit/"><span class="nav-icon">A</span><span>Audit Log</span></a><a class="nav-link" href="/admin/account/"><span class="nav-icon">P</span><span>My Account</span></a>
-  </nav>
+      <nav class="nav" aria-label="Administration navigation">
+        <div class="nav-label">Operations</div>
+        <a class="nav-link" href="/admin/">
+          <span class="nav-icon">D</span><span>Dashboard</span>
+        </a>
+        <a class="nav-link" href="/admin/board/">
+          <span class="nav-icon">V</span><span>Vehicle Board</span>
+        </a>
 
-  <div class="sidebar-footer">
-    <div class="sidebar-user">
-      <strong data-user-name>Loading user...</strong>
-      <span data-user-role>Authenticated user</span>
-    </div>
-    <button class="logout-button" type="button" data-logout>Log Out</button>
-  </div>
-</aside>
+        <div class="nav-label">Administration</div>
+        <a class="nav-link active" href="/admin/users/">
+          <span class="nav-icon">U</span><span>User Management</span>
+        </a>
+        <a class="nav-link" href="/admin/audit/">
+          <span class="nav-icon">A</span><span>Audit Log</span>
+        </a>
+        <a class="nav-link" href="/admin/account/">
+          <span class="nav-icon">P</span><span>My Account</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <strong data-user-name>Loading user...</strong>
+          <span data-user-role>Authenticated user</span>
+        </div>
+        <button class="logout-button" type="button" data-logout>Log Out</button>
+      </div>
+    </aside>
 
     <main class="main">
       <div class="topbar">
@@ -40,9 +164,10 @@
           <button class="mobile-menu-button" type="button" data-menu-toggle aria-label="Open menu">☰</button>
           <div>
             <h1 class="page-title">User Management</h1>
-            <p class="page-subtitle">Manage authorized portal accounts and roles.</p>
+            <p class="page-subtitle">Review the accounts authorized to access the Batavia Operations Portal.</p>
           </div>
         </div>
+
         <div class="session-badge">
           <span class="status-dot"></span>
           <span>Secure session active</span>
@@ -50,17 +175,58 @@
       </div>
 
       <div id="errorBanner" class="error-banner" role="alert"></div>
-      
-<section class="content-panel">
-  <h2>User Management</h2>
-  <p>The user table and account-management API will be added here next.</p>
-  <div class="placeholder-box">
-    This page is connected to the portal navigation and ready for the next development phase.
-  </div>
-</section>
 
+      <section class="stats-grid" aria-label="User account totals">
+        <article class="stat-card">
+          <div class="stat-label">Total Users</div>
+          <div id="userCount" class="stat-value">0</div>
+          <div class="stat-note">All portal accounts</div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-label">Active Users</div>
+          <div id="activeCount" class="stat-value">0</div>
+          <div class="stat-note">Enabled accounts</div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-label">Administrators</div>
+          <div id="adminCount" class="stat-value">0</div>
+          <div class="stat-note">Full-access accounts</div>
+        </article>
+      </section>
+
+      <section class="content-panel">
+        <div class="users-toolbar">
+          <div>
+            <h2>Authorized Users</h2>
+            <p>This first step is read-only. Account changes will be added next.</p>
+          </div>
+          <button id="refreshUsersButton" class="secondary-button" type="button">Refresh</button>
+        </div>
+
+        <div class="users-table-wrap">
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>Display Name</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody"></tbody>
+          </table>
+        </div>
+
+        <div id="usersLoadingState" class="table-state">Loading users...</div>
+        <div id="usersEmptyState" class="table-state" hidden>No user accounts were found.</div>
+        <div id="usersErrorState" class="table-state error" hidden></div>
+      </section>
     </main>
   </div>
+
   <script src="/admin/assets/portal.js"></script>
+  <script src="/admin/assets/users.js"></script>
 </body>
 </html>
