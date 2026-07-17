@@ -3,482 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MEMS-Batavia-Dashboard-Update</title>
-  <link rel="stylesheet" href="/style.css" />
-
-  <style>
-    #hospitalTable td select,
-    #hospitalTable td input,
-    #vehicleTable td input,
-    #vehicleTable td select,
-    #oosTable td input {
-      min-height: 42px;
-    }
-
-    #hospitalTable .facility {
-      background: #d9d9d9;
-      color: #000;
-      font-weight: bold;
-    }
-
-    .admin-header-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .logout-btn {
-      background: #ff671f;
-      color: #fff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .logout-btn:hover {
-      opacity: 0.9;
-    }
-
-    .logout-btn:disabled {
-      opacity: 0.65;
-      cursor: wait;
-    }
-
-    .daily-info-admin-box {
-      background: transparent;
-      color: #fff;
-      border-radius: 6px;
-    }
-
-    #dailyInfoInput {
-      width: 100%;
-      min-height: 180px;
-      box-sizing: border-box;
-      padding: 12px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,.25);
-      background: rgba(255,255,255,.08);
-      color: #fff;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 16px;
-      line-height: 1.35;
-      resize: vertical;
-    }
-
-    #dailyInfoInput::placeholder {
-      color: rgba(255,255,255,.65);
-    }
-
-    .admin-help-text {
-      margin-top: 8px;
-      font-size: 0.9rem;
-      color: #fff;
-    }
-
-    .full-width-label {
-      grid-column: span 2;
-    }
-
-    @media (max-width: 600px) {
-      .full-width-label {
-        grid-column: span 1;
-      }
-
-      .admin-header-actions {
-        justify-content: stretch;
-      }
-
-      .admin-header-actions button {
-        width: 100%;
-      }
-    }
-
-    .presence-banner {
-      background: #ff9800;
-      color: #000;
-      padding: 14px 20px;
-      border-radius: 6px;
-      margin-bottom: 24px;
-      font-weight: bold;
-      border-left: 6px solid #e65100;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-      animation: slideDown 0.3s ease-out;
-    }
-
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+  <title>Operations Dashboard - Mercy Flight EMS</title>
+  <link rel="stylesheet" href="/admin/assets/admin.css" />
 </head>
-
 <body>
-  <div class="admin-page">
-    <h1>MERCY EMS - BATAVIA ADMIN PORTAL</h1>
-
-    <div class="admin-header-actions">
-      <button id="logoutBtn" class="logout-btn" type="button">Log Out</button>
+  <div class="app-shell">
+    
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-mark">MF</div>
+    <div>
+      <h1 class="brand-title">Mercy Flight EMS</h1>
+      <p class="brand-subtitle">Batavia Operations Portal</p>
     </div>
-
-    <p>
-      <button type="button" onclick="exportPDF()">Export PDF</button>
-    </p>
-
-    <section class="admin-section">
-      <h2>Operations Team</h2>
-      <div class="form-grid">
-        <label>Crew Chief
-          <input id="crewChief" type="text" />
-        </label>
-
-        <label>Operations Manager
-          <input id="assistantChief" type="text" />
-        </label>
-
-        <label class="full-width-label">Medical Direction Phone # (Only update if directed to do so)
-          <input id="medicalDirection" type="text" placeholder="716-626-4011" />
-        </label>
-      </div>
-    </section>
-
-    <section class="admin-section">
-      <h2>Vehicle Assignments</h2>
-      <table id="vehicleTable">
-        <thead>
-          <tr>
-            <th>Vehicle</th>
-            <th>Shift ID</th>
-            <th>CTY ID</th>
-            <th>Time</th>
-            <th>Crew 1</th>
-            <th>Crew 2</th>
-            <th>Crew 3</th>
-            <th>Comments</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-
-      <p>
-        <button type="button" id="addVehicleRowBtn">Add Vehicle Row</button>
-      </p>
-    </section>
-
-    <section class="admin-section">
-      <h2>Hospital Status</h2>
-      <br />
-      <h3>(Orange = Facility is missing a service or experiencing an issue, Red = Facility is not accepting PTs.)</h3>
-
-      <table id="hospitalTable">
-        <thead>
-          <tr>
-            <th>Facility</th>
-            <th>Status</th>
-            <th>Comment</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
-
-    <section class="admin-section">
-      <h2>Daily Information / Announcements</h2>
-
-      <div class="daily-info-admin-box">
-        <textarea
-          id="dailyInfoInput"
-          placeholder="Enter daily information, reminders, schedule notes, email reminders, etc."
-        ></textarea>
-      </div>
-
-      <p class="admin-help-text">
-        This message appears on the display board and at the bottom of the PDF export.
-      </p>
-    </section>
-
-    <section class="admin-section admin-save-bar">
-      <button id="saveBtn" type="button">Save Changes</button>
-      <p id="statusMsg">Loading current board data...</p>
-    </section>
   </div>
 
-  <script>
-    let currentRevisionId = null;
-    let mySessionId = Math.random().toString(36).substring(2, 15);
+  <nav class="nav" aria-label="Administration navigation">
+    <div class="nav-label">Operations</div>
+    <a class="nav-link active" href="/admin/"><span class="nav-icon">D</span><span>Dashboard</span></a><a class="nav-link" href="/admin/board/"><span class="nav-icon">V</span><span>Vehicle Board</span></a>
+    <div class="nav-label">Administration</div>
+    <a class="nav-link" href="/admin/users/"><span class="nav-icon">U</span><span>User Management</span></a><a class="nav-link" href="/admin/audit/"><span class="nav-icon">A</span><span>Audit Log</span></a><a class="nav-link" href="/admin/account/"><span class="nav-icon">P</span><span>My Account</span></a>
+  </nav>
 
-    function escapeHtml(value) {
-      return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    }
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <strong data-user-name>Loading user...</strong>
+      <span data-user-role>Authenticated user</span>
+    </div>
+    <button class="logout-button" type="button" data-logout>Log Out</button>
+  </div>
+</aside>
 
-    function getDailyInfoHtml() {
-      const dailyInfoInput = document.getElementById("dailyInfoInput");
-      if (!dailyInfoInput) return "";
-      return dailyInfoInput.value.trim();
-    }
-
-    function exportPDF() {
-      const user = "Rig assignments are always scheduled to change!";
-      const now = new Date();
-      const medDirValue = document.getElementById("medicalDirection").value.trim() || "716-626-4011";
-      const rows = Array.from(document.querySelectorAll("#vehicleTable tbody tr"));
-
-      const tableRows = rows.map(row => `
-        <tr>
-          <td>${escapeHtml(row.querySelector(".vehicle").value)}</td>
-          <td>${escapeHtml(row.querySelector(".shiftId").value)}</td>
-          <td>${escapeHtml(row.querySelector(".ctyId").value)}</td>
-          <td>${escapeHtml(row.querySelector(".time").value)}</td>
-          <td>${escapeHtml(row.querySelector(".crew1").value)}</td>
-          <td>${escapeHtml(row.querySelector(".crew2").value)}</td>
-          <td>${escapeHtml(row.querySelector(".crew3").value)}</td>
-          <td>${escapeHtml(row.querySelector(".comments").value)}</td>
-        </tr>
-      `).join("");
-
-      const dailyInfoText = getDailyInfoHtml();
-      const dailyInfoSection = dailyInfoText
-        ? `
-          <div class="daily-info-pdf">
-            <h3>Daily Information / Announcements</h3>
-            <div class="daily-info-content">${escapeHtml(dailyInfoText)}</div>
+    <main class="main">
+      <div class="topbar">
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <button class="mobile-menu-button" type="button" data-menu-toggle aria-label="Open menu">☰</button>
+          <div>
+            <h1 class="page-title">Operations Dashboard</h1>
+            <p class="page-subtitle">Central administration for the Batavia vehicle status board.</p>
           </div>
-        `
-        : "";
+        </div>
+        <div class="session-badge">
+          <span class="status-dot"></span>
+          <span>Secure session active</span>
+        </div>
+      </div>
 
-      const printWindow = window.open("", "_blank");
+      <div id="errorBanner" class="error-banner" role="alert"></div>
+      
+<section class="hero-panel">
+  <h2>Welcome, <span data-user-name>Administrator</span></h2>
+  <p>
+    Manage the Batavia vehicle status board and access administrative tools
+    from one secure Mercy Flight EMS portal.
+  </p>
+</section>
 
-      if (!printWindow) {
-        alert("The PDF window was blocked. Please allow pop-ups and try again.");
-        return;
-      }
+<section class="stats-grid" aria-label="Portal status">
+  <article class="stat-card">
+    <div class="stat-label">Authentication</div>
+    <div class="stat-value">Active</div>
+    <div class="stat-note">D1-backed secure session</div>
+  </article>
 
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>Vehicle Assignments</title>
-          <style>
-            @page { size: landscape; margin: 0.5in; }
-            body { font-family: Arial, sans-serif; font-size: 11pt; color: #000; margin: 0; }
-            h2 { text-align: center; margin: 0 0 4px 0; font-size: 16pt; font-weight: bold; }
-            .med-dir-pdf-line { text-align: center; font-size: 11pt; font-weight: bold; margin-bottom: 12px; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #000; padding: 4px 6px; text-align: left; vertical-align: top; }
-            th { font-weight: bold; }
-            thead { display: table-header-group; }
-            .daily-info-pdf { margin-top: 14px; border: 1px solid #000; padding: 8px; page-break-inside: avoid; }
-            .daily-info-pdf h3 { margin: 0 0 6px 0; font-size: 12pt; text-transform: uppercase; }
-            .daily-info-content { font-size: 10.5pt; line-height: 1.3; white-space: pre-wrap; }
-            .footer { margin-top: 10px; font-size: 9pt; display: flex; justify-content: space-between; }
-          </style>
-        </head>
-        <body>
-          <h2>Mercy Flight EMS: Batavia Base - Vehicle Assignments</h2>
-          <div class="med-dir-pdf-line">Medical Direction: ${escapeHtml(medDirValue)}</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Vehicle</th>
-                <th>Shift ID</th>
-                <th>CTY ID</th>
-                <th>Time</th>
-                <th>Crew 1</th>
-                <th>Crew 2</th>
-                <th>Crew 3</th>
-                <th>Comments</th>
-              </tr>
-            </thead>
-            <tbody>${tableRows}</tbody>
-          </table>
-          ${dailyInfoSection}
-          <div class="footer">
-            <span>REMINDER: ${escapeHtml(user)}</span>
-            <span>${escapeHtml(now.toLocaleString())}</span>
-          </div>
-        </body>
-        </html>
-      `);
+  <article class="stat-card">
+    <div class="stat-label">Vehicle Board</div>
+    <div class="stat-value">Online</div>
+    <div class="stat-note">Board data connection available</div>
+  </article>
 
-      printWindow.document.close();
-      printWindow.focus();
-      printWindow.print();
-    }
+  <article class="stat-card">
+    <div class="stat-label">Access Level</div>
+    <div class="stat-value" data-user-role>Loading...</div>
+    <div class="stat-note">Current account role</div>
+  </article>
+</section>
 
-    function createVehicleRow(vehicle = {}) {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td><input type="text" class="vehicle" value="${escapeHtml(vehicle.vehicle || "")}"></td>
-        <td><input type="text" class="shiftId" value="${escapeHtml(vehicle.shiftId || "")}"></td>
-        <td><input type="text" class="ctyId" value="${escapeHtml(vehicle.ctyId || "")}"></td>
-        <td><input type="text" class="time" value="${escapeHtml(vehicle.time || "")}"></td>
-        <td><input type="text" class="crew1" value="${escapeHtml(vehicle.crew1 || "")}"></td>
-        <td><input type="text" class="crew2" value="${escapeHtml(vehicle.crew2 || "")}"></td>
-        <td><input type="text" class="crew3" value="${escapeHtml(vehicle.crew3 || "")}"></td>
-        <td><input type="text" class="comments" value="${escapeHtml(vehicle.comments || "")}"></td>
-        <td><button type="button" class="deleteRowBtn">Delete</button></td>
-      `;
+<section class="module-grid" aria-label="Portal modules">
+  <a class="module-card" href="/admin/board/">
+    <div class="module-icon">V</div>
+    <h3>Vehicle Status Board</h3>
+    <p>Edit operations staffing, vehicle assignments, hospital status, and daily announcements.</p>
+    <span class="module-arrow">→</span>
+  </a>
 
-      row.querySelector(".deleteRowBtn").addEventListener("click", () => row.remove());
-      return row;
-    }
+  <a class="module-card" href="/admin/users/">
+    <span class="module-badge">Next phase</span>
+    <div class="module-icon">U</div>
+    <h3>User Management</h3>
+    <p>Create accounts, assign roles, disable access, reset passwords, and end sessions.</p>
+    <span class="module-arrow">→</span>
+  </a>
 
-    function createHospitalRow(hospital = {}) {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td><input type="text" class="facility" value="${escapeHtml(hospital.facility || "")}" readonly></td>
-        <td>
-          <select class="status">
-            <option value="OPEN" ${hospital.status === "OPEN" ? "selected" : ""}>OPEN</option>
-            <option value="RED" ${hospital.status === "RED" ? "selected" : ""}>RED</option>
-            <option value="ORANGE" ${hospital.status === "ORANGE" ? "selected" : ""}>ORANGE</option>
-          </select>
-        </td>
-        <td><input type="text" class="comment" value="${escapeHtml(hospital.comment || "")}" placeholder="Enter comment"></td>
-      `;
-      return row;
-    }
+  <a class="module-card" href="/admin/audit/">
+    <span class="module-badge">Planned</span>
+    <div class="module-icon">A</div>
+    <h3>Audit Log</h3>
+    <p>Review logins, board updates, account changes, and other administrative activity.</p>
+    <span class="module-arrow">→</span>
+  </a>
 
-    function loadForm(data) {
-      document.getElementById("crewChief").value = data.operations?.crewChief || "";
-      document.getElementById("assistantChief").value = data.operations?.assistantChief || "";
-      document.getElementById("medicalDirection").value = data.operations?.medicalDirection || "716-626-4011";
+  <a class="module-card" href="/admin/account/">
+    <span class="module-badge">Planned</span>
+    <div class="module-icon">P</div>
+    <h3>My Account</h3>
+    <p>Review account information and securely change your password.</p>
+    <span class="module-arrow">→</span>
+  </a>
+</section>
 
-      const vehicleBody = document.querySelector("#vehicleTable tbody");
-      vehicleBody.innerHTML = "";
-      (data.vehicles || []).forEach(vehicle => vehicleBody.appendChild(createVehicleRow(vehicle)));
-
-      const hospitalBody = document.querySelector("#hospitalTable tbody");
-      hospitalBody.innerHTML = "";
-      (data.hospitals || []).forEach(hospital => hospitalBody.appendChild(createHospitalRow(hospital)));
-
-      const dailyInfoInput = document.getElementById("dailyInfoInput");
-      if (dailyInfoInput) dailyInfoInput.value = data.dailyInfo || "";
-    }
-
-    function collectFormData() {
-      const operations = {
-        crewChief: document.getElementById("crewChief").value.trim(),
-        assistantChief: document.getElementById("assistantChief").value.trim(),
-        medicalDirection: document.getElementById("medicalDirection").value.trim()
-      };
-
-      const vehicles = Array.from(document.querySelectorAll("#vehicleTable tbody tr")).map(row => ({
-        vehicle: row.querySelector(".vehicle").value.trim(),
-        shiftId: row.querySelector(".shiftId").value.trim(),
-        ctyId: row.querySelector(".ctyId").value.trim(),
-        time: row.querySelector(".time").value.trim(),
-        crew1: row.querySelector(".crew1").value.trim(),
-        crew2: row.querySelector(".crew2").value.trim(),
-        crew3: row.querySelector(".crew3").value.trim(),
-        comments: row.querySelector(".comments").value.trim()
-      })).filter(vehicle => Object.values(vehicle).some(value => value !== ""));
-
-      const hospitals = Array.from(document.querySelectorAll("#hospitalTable tbody tr")).map(row => ({
-        facility: row.querySelector(".facility").value.trim(),
-        status: row.querySelector(".status").value,
-        comment: row.querySelector(".comment").value.trim()
-      }));
-
-      return { operations, vehicles, hospitals, dailyInfo: getDailyInfoHtml() };
-    }
-
-    function injectPresenceBanner(message) {
-      const existing = document.querySelector(".presence-banner");
-      if (existing) existing.remove();
-
-      const banner = document.createElement("div");
-      banner.className = "presence-banner";
-      banner.textContent = message;
-
-      const adminPage = document.querySelector(".admin-page");
-      if (adminPage) adminPage.insertBefore(banner, adminPage.firstChild);
-    }
-
-    function removePresenceBanner() {
-      const existing = document.querySelector(".presence-banner");
-      if (existing) existing.remove();
-    }
-
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-      const logoutBtn = document.getElementById("logoutBtn");
-      logoutBtn.disabled = true;
-      logoutBtn.textContent = "Logging out...";
-
-      try {
-        const response = await fetch("/api/logout", {
-          method: "POST",
-          credentials: "include"
-        });
-
-        if (!response.ok) throw new Error(`Logout failed: ${response.status}`);
-        window.location.replace("/auth/login.html");
-      } catch (error) {
-        logoutBtn.disabled = false;
-        logoutBtn.textContent = "Log Out";
-        alert("Unable to log out: " + error.message);
-      }
-    });
-
-    document.getElementById("addVehicleRowBtn").addEventListener("click", () => {
-      document.querySelector("#vehicleTable tbody").appendChild(createVehicleRow({}));
-    });
-
-    document.getElementById("saveBtn").addEventListener("click", async () => {
-      const payload = {
-        ...collectFormData(),
-        revisionId: currentRevisionId,
-        senderId: mySessionId
-      };
-
-      try {
-        const response = await fetch("/api/board", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(payload)
-        });
-
-        if (response.status === 409) {
-          throw new Error("Conflict! Another dispatcher saved updates to this board while you were editing.");
-        }
-
-        if (!response.ok) throw new Error(`Save failed: ${response.status}`);
-
-        const result = await response.json();
-        currentRevisionId = result.revisionId;
-        document.getElementById("statusMsg").textContent = "Board updated successfully.";
-        removePresenceBanner();
-      } catch (error) {
-        document.getElementById("statusMsg").textContent = "Error saving board: " + error.message;
-        injectPresenceBanner(`Save denied: ${error.message} To protect active data, please copy your edits, reload this tab, and reapply them.`);
-      }
-    });
-
-    fetch(`/api/board?ts=${Date.now()}`, {
-      cache: "no-store",
-      credentials: "include"
-    })
-      .then(response => {
-        if (!response.ok) throw new Error(`Load failed: ${response.status}`);
-        return response.json();
-      })
-      .then(data => {
-        loadForm(data);
-        currentRevisionId = data.revisionId || "initial-revision-v1";
-        document.getElementById("statusMsg").textContent = "Current board data loaded.";
-      })
-      .catch(error => {
-        document.getElementById("statusMsg").textContent = "Error loading board data: " + error.message;
-      });
-  </script>
+    </main>
+  </div>
+  <script src="/admin/assets/portal.js"></script>
 </body>
 </html>
