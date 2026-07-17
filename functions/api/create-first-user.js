@@ -1,4 +1,4 @@
-const ITERATIONS = 310000;
+const ITERATIONS = 100000;
 
 function escapeHtml(value) {
   return String(value)
