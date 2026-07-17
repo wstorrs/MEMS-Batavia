@@ -1,5 +1,5 @@
 const SESSION_COOKIE = "mf_batavia_session";
-const PASSWORD_ITERATIONS = 310000;
+const PASSWORD_ITERATIONS = 100000;
 const VALID_ROLES = new Set(["admin", "operations", "viewer"]);
 
 export function jsonResponse(data, status = 200) {
