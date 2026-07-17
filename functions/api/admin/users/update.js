@@ -250,13 +250,3 @@ if (!emailPattern.test(username)) {
     }
   });
 }
-
-export function onRequest() {
-  return jsonResponse(
-    {
-      ok: false,
-      error: "Method not allowed."
-    },
-    405
-  );
-}
