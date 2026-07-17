@@ -53,16 +53,17 @@ export async function onRequestPost(context) {
     );
   }
 
-  if (!/^[a-z0-9._-]{3,50}$/.test(username)) {
-    return jsonResponse(
-      {
-        ok: false,
-        error:
-          "Username must be 3–50 characters and may contain only letters, numbers, periods, underscores, and hyphens."
-      },
-      400
-    );
-  }
+  const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+if (!emailPattern.test(username)) {
+  return jsonResponse(
+    {
+      ok: false,
+      error: "A valid email address is required."
+    },
+    400
+  );
+}
 
   if (!displayName) {
     return jsonResponse(
