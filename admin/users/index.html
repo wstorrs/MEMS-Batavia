@@ -34,7 +34,14 @@
       </section>
       <section class="content-panel">
         <div class="users-toolbar"><div><h2>Authorized Users</h2><p>Create portal accounts and review existing access.</p></div><div class="toolbar-actions"><button id="openCreateUserButton" class="primary-button" type="button">+ New User</button><button id="refreshUsersButton" class="secondary-button" type="button">Refresh</button></div></div>
-        <div class="users-table-wrap"><table class="users-table"><thead><tr><th>Display Name</th><th>Username</th><th>Role</th><th>Status</th></tr></thead><tbody id="usersTableBody"></tbody></table></div>
+        <div class="users-table-wrap"><table class="users-table"><thead><tr>
+  <th>Display Name</th>
+  <th>Username</th>
+  <th>Role</th>
+  <th>Status</th>
+  <th>Last Login</th>
+  <th>Created</th>
+</tr></thead><tbody id="usersTableBody"></tbody></table></div>
         <div id="usersLoadingState" class="table-state">Loading users...</div><div id="usersEmptyState" class="table-state" hidden>No user accounts were found.</div><div id="usersErrorState" class="table-state error" hidden></div>
       </section>
     </main>
