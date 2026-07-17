@@ -206,13 +206,3 @@ if (!emailPattern.test(username)) {
     201
   );
 }
-
-export function onRequest() {
-  return jsonResponse(
-    {
-      ok: false,
-      error: "Method not allowed."
-    },
-    405
-  );
-}
