@@ -94,13 +94,3 @@ export async function onRequestPost(context) {
       : "User account disabled and active sessions revoked."
   });
 }
-
-export function onRequest() {
-  return jsonResponse(
-    {
-      ok: false,
-      error: "Method not allowed."
-    },
-    405
-  );
-}
