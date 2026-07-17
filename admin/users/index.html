@@ -6,226 +6,53 @@
   <title>User Management - Mercy Flight EMS</title>
   <link rel="stylesheet" href="/admin/assets/admin.css" />
   <style>
-    .users-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .users-toolbar p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .secondary-button {
-      min-height: 40px;
-      padding: 0 15px;
-      border: 1px solid rgba(255, 103, 31, 0.55);
-      border-radius: 9px;
-      background: transparent;
-      color: var(--white);
-      cursor: pointer;
-    }
-
-    .secondary-button:hover {
-      background: rgba(255, 103, 31, 0.17);
-    }
-
-    .secondary-button:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
-
-    .users-table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-
-    .users-table {
-      width: 100%;
-      min-width: 680px;
-      border-collapse: collapse;
-      background: rgba(6, 16, 35, 0.35);
-    }
-
-    .users-table th,
-    .users-table td {
-      padding: 15px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .users-table th {
-      color: var(--muted);
-      font-size: 0.76rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .users-table tbody tr:last-child td {
-      border-bottom: 0;
-    }
-
-    .users-table tbody tr:hover {
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .user-status {
-      display: inline-flex;
-      align-items: center;
-      padding: 5px 9px;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-
-    .user-status-active {
-      color: #dcfce7;
-      background: rgba(34, 197, 94, 0.14);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-
-    .user-status-disabled {
-      color: #fee2e2;
-      background: rgba(239, 68, 68, 0.13);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    .table-state {
-      margin-top: 16px;
-      padding: 15px;
-      border-radius: 10px;
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .table-state.error {
-      color: #fee2e2;
-      background: rgba(127, 29, 29, 0.32);
-      border: 1px solid rgba(239, 68, 68, 0.42);
-    }
-
-    @media (max-width: 680px) {
-      .users-toolbar {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-    }
+    .users-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:18px}.users-toolbar p{margin:0;color:var(--muted)}.toolbar-actions{display:flex;gap:10px;flex-wrap:wrap}.primary-button,.secondary-button{min-height:40px;padding:0 15px;border-radius:9px;cursor:pointer;font:inherit;font-weight:700}.primary-button{border:1px solid #ff671f;background:#ff671f;color:#fff}.secondary-button{border:1px solid rgba(255,103,31,.55);background:transparent;color:var(--white)}.primary-button:disabled,.secondary-button:disabled{opacity:.6;cursor:wait}.users-table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}.users-table{width:100%;min-width:680px;border-collapse:collapse;background:rgba(6,16,35,.35)}.users-table th,.users-table td{padding:15px 16px;text-align:left;border-bottom:1px solid var(--border)}.users-table th{color:var(--muted);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.04)}.users-table tbody tr:last-child td{border-bottom:0}.users-table tbody tr:hover{background:rgba(255,255,255,.04)}.user-status{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:.78rem;font-weight:700}.user-status-active{color:#dcfce7;background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.3)}.user-status-disabled{color:#fee2e2;background:rgba(239,68,68,.13);border:1px solid rgba(239,68,68,.3)}.table-state{margin-top:16px;padding:15px;border-radius:10px;color:var(--muted);background:rgba(255,255,255,.05)}.table-state.error,.form-message.error{color:#fee2e2;background:rgba(127,29,29,.32);border:1px solid rgba(239,68,68,.42)}.form-message.success{color:#dcfce7;background:rgba(22,101,52,.3);border:1px solid rgba(34,197,94,.35)}.user-dialog{width:min(560px,calc(100vw - 32px));padding:0;border:1px solid var(--border);border-radius:14px;background:#10254a;color:var(--white);box-shadow:0 28px 80px rgba(0,0,0,.45)}.user-dialog::backdrop{background:rgba(2,8,23,.78);backdrop-filter:blur(3px)}.dialog-header{padding:20px 22px 14px;border-bottom:1px solid var(--border)}.dialog-header h2{margin:0 0 5px}.dialog-header p{margin:0;color:var(--muted)}.dialog-body{padding:20px 22px}.form-grid{display:grid;gap:16px}.form-field{display:grid;gap:7px}.form-field label{font-weight:700}.form-field input,.form-field select{width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--border);border-radius:9px;background:rgba(3,12,28,.55);color:var(--white);font:inherit}.form-field small{color:var(--muted);line-height:1.4}.checkbox-row{display:flex;align-items:center;gap:9px}.checkbox-row input{width:18px;height:18px}.form-message{padding:11px 12px;border-radius:9px}.dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:16px 22px 20px;border-top:1px solid var(--border)}@media(max-width:680px){.users-toolbar{align-items:flex-start;flex-direction:column}.toolbar-actions{width:100%}.toolbar-actions button{flex:1}}
   </style>
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-mark">MF</div>
-        <div>
-          <h1 class="brand-title">Mercy Flight EMS</h1>
-          <p class="brand-subtitle">Batavia Operations Portal</p>
-        </div>
-      </div>
-
+      <div class="brand"><div class="brand-mark">MF</div><div><h1 class="brand-title">Mercy Flight EMS</h1><p class="brand-subtitle">Batavia Operations Portal</p></div></div>
       <nav class="nav" aria-label="Administration navigation">
         <div class="nav-label">Operations</div>
-        <a class="nav-link" href="/admin/">
-          <span class="nav-icon">D</span><span>Dashboard</span>
-        </a>
-        <a class="nav-link" href="/admin/board/">
-          <span class="nav-icon">V</span><span>Vehicle Board</span>
-        </a>
-
+        <a class="nav-link" href="/admin/"><span class="nav-icon">D</span><span>Dashboard</span></a>
+        <a class="nav-link" href="/admin/board/"><span class="nav-icon">V</span><span>Vehicle Board</span></a>
         <div class="nav-label">Administration</div>
-        <a class="nav-link active" href="/admin/users/">
-          <span class="nav-icon">U</span><span>User Management</span>
-        </a>
-        <a class="nav-link" href="/admin/audit/">
-          <span class="nav-icon">A</span><span>Audit Log</span>
-        </a>
-        <a class="nav-link" href="/admin/account/">
-          <span class="nav-icon">P</span><span>My Account</span>
-        </a>
+        <a class="nav-link active" href="/admin/users/"><span class="nav-icon">U</span><span>User Management</span></a>
+        <a class="nav-link" href="/admin/audit/"><span class="nav-icon">A</span><span>Audit Log</span></a>
+        <a class="nav-link" href="/admin/account/"><span class="nav-icon">P</span><span>My Account</span></a>
       </nav>
-
-      <div class="sidebar-footer">
-        <div class="sidebar-user">
-          <strong data-user-name>Loading user...</strong>
-          <span data-user-role>Authenticated user</span>
-        </div>
-        <button class="logout-button" type="button" data-logout>Log Out</button>
-      </div>
+      <div class="sidebar-footer"><div class="sidebar-user"><strong data-user-name>Loading user...</strong><span data-user-role>Authenticated user</span></div><button class="logout-button" type="button" data-logout>Log Out</button></div>
     </aside>
-
     <main class="main">
-      <div class="topbar">
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <button class="mobile-menu-button" type="button" data-menu-toggle aria-label="Open menu">☰</button>
-          <div>
-            <h1 class="page-title">User Management</h1>
-            <p class="page-subtitle">Review the accounts authorized to access the Batavia Operations Portal.</p>
-          </div>
-        </div>
-
-        <div class="session-badge">
-          <span class="status-dot"></span>
-          <span>Secure session active</span>
-        </div>
-      </div>
-
+      <div class="topbar"><div style="display:flex;align-items:flex-start;gap:12px;"><button class="mobile-menu-button" type="button" data-menu-toggle aria-label="Open menu">☰</button><div><h1 class="page-title">User Management</h1><p class="page-subtitle">Manage accounts authorized to access the Batavia Operations Portal.</p></div></div><div class="session-badge"><span class="status-dot"></span><span>Secure session active</span></div></div>
       <div id="errorBanner" class="error-banner" role="alert"></div>
-
       <section class="stats-grid" aria-label="User account totals">
-        <article class="stat-card">
-          <div class="stat-label">Total Users</div>
-          <div id="userCount" class="stat-value">0</div>
-          <div class="stat-note">All portal accounts</div>
-        </article>
-
-        <article class="stat-card">
-          <div class="stat-label">Active Users</div>
-          <div id="activeCount" class="stat-value">0</div>
-          <div class="stat-note">Enabled accounts</div>
-        </article>
-
-        <article class="stat-card">
-          <div class="stat-label">Administrators</div>
-          <div id="adminCount" class="stat-value">0</div>
-          <div class="stat-note">Full-access accounts</div>
-        </article>
+        <article class="stat-card"><div class="stat-label">Total Users</div><div id="userCount" class="stat-value">0</div><div class="stat-note">All portal accounts</div></article>
+        <article class="stat-card"><div class="stat-label">Active Users</div><div id="activeCount" class="stat-value">0</div><div class="stat-note">Enabled accounts</div></article>
+        <article class="stat-card"><div class="stat-label">Administrators</div><div id="adminCount" class="stat-value">0</div><div class="stat-note">Full-access accounts</div></article>
       </section>
-
       <section class="content-panel">
-        <div class="users-toolbar">
-          <div>
-            <h2>Authorized Users</h2>
-            <p>This first step is read-only. Account changes will be added next.</p>
-          </div>
-          <button id="refreshUsersButton" class="secondary-button" type="button">Refresh</button>
-        </div>
-
-        <div class="users-table-wrap">
-          <table class="users-table">
-            <thead>
-              <tr>
-                <th>Display Name</th>
-                <th>Username</th>
-                <th>Role</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="usersTableBody"></tbody>
-          </table>
-        </div>
-
-        <div id="usersLoadingState" class="table-state">Loading users...</div>
-        <div id="usersEmptyState" class="table-state" hidden>No user accounts were found.</div>
-        <div id="usersErrorState" class="table-state error" hidden></div>
+        <div class="users-toolbar"><div><h2>Authorized Users</h2><p>Create portal accounts and review existing access.</p></div><div class="toolbar-actions"><button id="openCreateUserButton" class="primary-button" type="button">+ New User</button><button id="refreshUsersButton" class="secondary-button" type="button">Refresh</button></div></div>
+        <div class="users-table-wrap"><table class="users-table"><thead><tr><th>Display Name</th><th>Username</th><th>Role</th><th>Status</th></tr></thead><tbody id="usersTableBody"></tbody></table></div>
+        <div id="usersLoadingState" class="table-state">Loading users...</div><div id="usersEmptyState" class="table-state" hidden>No user accounts were found.</div><div id="usersErrorState" class="table-state error" hidden></div>
       </section>
     </main>
   </div>
-
+  <dialog id="createUserDialog" class="user-dialog">
+    <form id="createUserForm">
+      <div class="dialog-header"><h2>Create User</h2><p>Create a new account for the Batavia Operations Portal.</p></div>
+      <div class="dialog-body"><div class="form-grid">
+        <div id="createUserError" class="form-message error" hidden></div><div id="createUserSuccess" class="form-message success" hidden></div>
+        <div class="form-field"><label for="newUserDisplayName">Display Name</label><input id="newUserDisplayName" type="text" maxlength="100" autocomplete="name" required /></div>
+        <div class="form-field"><label for="newUserUsername">Email Address</label><input id="newUserUsername" type="email" maxlength="254" autocomplete="username" required /></div>
+        <div class="form-field"><label for="newUserPassword">Temporary Password</label><input id="newUserPassword" type="password" minlength="12" autocomplete="new-password" required /><small>At least 12 characters with uppercase, lowercase, number, and special character.</small></div>
+        <div class="form-field"><label for="newUserRole">Role</label><select id="newUserRole" required><option value="operations">Operations</option><option value="read-only">Read Only</option><option value="admin">Administrator</option></select></div>
+        <label class="checkbox-row" for="newUserEnabled"><input id="newUserEnabled" type="checkbox" checked /><span>Enable this account immediately</span></label>
+      </div></div>
+      <div class="dialog-actions"><button id="cancelCreateUserButton" class="secondary-button" type="button">Cancel</button><button id="createUserSubmitButton" class="primary-button" type="submit">Create User</button></div>
+    </form>
+  </dialog>
   <script src="/admin/assets/portal.js"></script>
   <script src="/admin/assets/users.js"></script>
 </body>
