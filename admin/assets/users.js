@@ -62,11 +62,13 @@ function renderUsers(users) {
     const statusText = user.enabled ? "Active" : "Disabled";
 
     row.innerHTML = `
-      <td><strong>${escapeHtml(user.displayName || "Unnamed User")}</strong></td>
-      <td>${escapeHtml(user.username)}</td>
-      <td>${escapeHtml(formatRole(user.role))}</td>
-      <td><span class="${statusClass}">${statusText}</span></td>
-    `;
+  <td><strong>${escapeHtml(user.displayName || "Unnamed User")}</strong></td>
+  <td>${escapeHtml(user.username)}</td>
+  <td>${escapeHtml(formatRole(user.role))}</td>
+  <td><span class="${statusClass}">${statusText}</span></td>
+  <td>${escapeHtml(formatDate(user.lastLogin))}</td>
+  <td>${escapeHtml(formatDate(user.createdAt))}</td>
+`;
     usersTableBody.appendChild(row);
   }
 }
