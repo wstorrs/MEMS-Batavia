@@ -35,12 +35,14 @@ export async function onRequestGet(context) {
 
     const result = await context.env.AUTH_DB.prepare(
       `SELECT
-         id,
-         username,
-         display_name,
-         role,
-         enabled
-       FROM users
+  id,
+  username,
+  display_name,
+  role,
+  enabled,
+  created_at,
+  last_login
+FROM users
        ORDER BY
          CASE WHEN enabled = 1 THEN 0 ELSE 1 END,
          LOWER(display_name),
@@ -48,12 +50,14 @@ export async function onRequestGet(context) {
     ).all();
 
     const users = (result.results || []).map(user => ({
-      id: user.id,
-      username: user.username || "",
-      displayName: user.display_name || "",
-      role: user.role || "read-only",
-      enabled: user.enabled === 1
-    }));
+  id: user.id,
+  username: user.username || "",
+  displayName: user.display_name || "",
+  role: user.role || "read-only",
+  enabled: user.enabled === 1,
+  createdAt: user.created_at || null,
+  lastLogin: user.last_login || null
+}));
 
     return jsonResponse({
       ok: true,
